@@ -1,0 +1,40 @@
+import maya.cmds as cmd
+
+if cmd.window('FastConnect', exists = True):
+   cmd.deleteUI('FastConnect', window=True)
+def Loc(*arg):
+   global selectionLoc
+   selectionLoc = cmd.ls(selection = True)
+   print selectionLoc
+def Obj(*arg):
+   global selectionObjs
+   selectionObjs = cmd.ls(selection = True)
+   print selectionObjs
+def ConnectRotate(*arg):
+   ListAttr = ['rx', 'ry', 'rz']
+   for locs in selectionLoc:
+       for objs in selectionObjs:
+           for attr in ListAttr:
+               cmd.connectAttr(locs+'.'+attr, objs+'.'+attr, force = True )
+def ConnectTranslate(*arg):
+   ListAttr = ['tx', 'ty', 'tz']
+   for locs in selectionLoc:
+       for objs in selectionObjs:
+           for attr in ListAttr:
+               cmd.connectAttr(locs+'.'+attr, objs+'.'+attr, force = True )
+def ConnectScale(*arg):
+   ListAttr = ['sx', 'sy', 'sz']
+   for locs in selectionLoc:
+       for objs in selectionObjs:
+           for attr in ListAttr:
+               cmd.connectAttr(locs+'.'+attr, objs+'.'+attr, force = True )
+def FastWindow(*args):
+   cmd.window('FastConnect', title='Fast Connect', iconName='Short Name', widthHeight=(210, 250), s=True)
+   cmd.columnLayout(height=250, width=210, vis=True, adjustableColumn = True)
+   cmd.button(label='DEFINE DRIVER', height=50, width=180, command = Loc)
+   cmd.button(label='DEFINE DRIVENS', height=50, width=180, command = Obj)
+   cmd.button(label='CONNECT ROTATE', height=50, width=180, command = ConnectRotate)
+   cmd.button(label='CONNECT TRANSLATE', height=50, width=180, command = ConnectTranslate)
+   cmd.button(label='CONNECT SCALE', height=50, width=180, command = ConnectScale)
+   cmd.showWindow('FastConnect')
+FastWindow()
